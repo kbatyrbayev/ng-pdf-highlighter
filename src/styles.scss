@@ -15,4 +15,12 @@ body {
     font-family: 'Tahoma', sans-serif;
     font-size: 14px;
     color: #1A1A1A;
+    overflow: hidden;
 }
+
+.disable-textLayer {
+    pointer-events: none;
+    user-select: none;
+}
+
+

@@ -1,7 +1,18 @@
 <div class="container">
 
   <div class="container__left-side">
-
+    <h2>Angular PDF highlighter</h2>
+    <div class="list">
+      <div class="list-row" *ngFor="let list of areaInfo">
+        <div class="title">Position:</div>
+        <pre>
+          <div [innerHTML]="list?.rect | json"></div> 
+        </pre>
+        <div class="page-number">
+          Page {{list?.pageNumber}}
+        </div>
+      </div>
+    </div>
   </div>
 
   <div 
@@ -9,12 +20,21 @@
     class="container__right-side"
     (mousemove)="mouseEvent($event)"
     (mousedown)="mouseEvent($event)"
-    (mouseup)="mouseEvent($event)">
+    (mouseup)="mouseEvent($event)"
+    >
     <pdf-viewer 
-        src="./assets/pdf-test.pdf" 
+        src="./assets/selected-pdf.pdf" 
         [render-text]="true"
         (page-rendered)="pageRendered($event)"
         style="display: block;"> </pdf-viewer>
   </div>
 
+</div>
+
+
+<div class="js-popper popper" [style.display]="getStyle()">
+  <div class="icons">
+    <i class="material-icons icon icon-apply" (click)="save($event)">check_box</i>
+    <i class="material-icons icon icon-close" (click)="cancel($event)">close</i>
+  </div>
 </div>
