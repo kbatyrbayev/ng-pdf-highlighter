@@ -1,5 +1,20 @@
-<!-- <pdf-viewer 
-    [src]="'https://vadimdez.github.io/ng2-pdf-viewer/pdf-test.pdf'" 
-    [render-text]="true" 
-    style="display: block;">
-</pdf-viewer> -->
+<div class="container">
+
+  <div class="container__left-side">
+
+  </div>
+
+  <div 
+    #pdfContainer
+    class="container__right-side"
+    (mousemove)="mouseEvent($event)"
+    (mousedown)="mouseEvent($event)"
+    (mouseup)="mouseEvent($event)">
+    <pdf-viewer 
+        src="./assets/pdf-test.pdf" 
+        [render-text]="true"
+        (page-rendered)="pageRendered($event)"
+        style="display: block;"> </pdf-viewer>
+  </div>
+
+</div>
