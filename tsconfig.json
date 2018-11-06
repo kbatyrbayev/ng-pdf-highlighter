@@ -16,6 +16,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "stream": [
+        "./node_modules/stream-browserify/index.js"
+      ],
+      "zlib": [
+        "./node_modules/browserify-zlib/lib/index.js"
+      ]
+    }
   }
 }
