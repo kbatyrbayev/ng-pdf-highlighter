@@ -26,6 +26,35 @@ export class AppComponent {
   ctx;
   element = null;
   dataPageNumber: number;
+
+  areaInfo: AreaInfo[] = [];
+
+  constructor() {
+    this.areaInfo = [
+      {
+        "pageNumber": 1,
+        "rect": {
+          "height": 127,
+          "width": 646,
+          "x1": 60.5,
+          "x2": 706.5,
+          "y1": 257,
+          "y2": 384
+        }
+      },
+      {
+        "pageNumber": 3,
+        "rect": {
+          "height": 141,
+          "width": 636,
+          "x1": 66.921875,
+          "x2": 702.921875,
+          "y1": 226,
+          "y2": 367
+        }
+      }];
+  }
+
   mouseEvent(event) {
 
     if (!this.showPopup) {
@@ -113,6 +142,7 @@ export class AppComponent {
   }
 
   // added new div when pages rendered
+  indexOfPage: number = 1;
   pageRendered(event) {
     let elem = document.createElement('div');
     elem.className = 'to-draw-rectangle';
@@ -125,9 +155,27 @@ export class AppComponent {
     // elem.style.background = 'red';
     // elem.style.opacity = '0.4';
     event.path.find(p => p.className == 'page').appendChild(elem);
-    $('.textLayer').addClass('disable-textLayer');
-  }
 
+    $('.textLayer').addClass('disable-textLayer');
+
+    let rectElem = this.areaInfo.find(f => f.pageNumber === this.indexOfPage);
+    if (typeof rectElem !== 'undefined') {
+      let rectId = document.getElementsByClassName('rectangle').length + 1;
+      let rect = document.createElement('div');
+      rect.className = 'rectangle';
+      rect.id = 'rectangle-' + rectId;
+      rect.style.position = 'absolute';
+      rect.style.border = '2px solid #0084FF';
+      rect.style.borderRadius = '3px';
+      rect.style.left = rectElem.rect.x1 + 'px';
+      rect.style.top = rectElem.rect.y1 + 'px';
+      rect.style.width = rectElem.rect.width + 'px';
+      rect.style.height = rectElem.rect.height + 'px';
+      //get to-draw-rectangle div and add rectangle
+      event.path.find(p => p.className == 'page').children[2].appendChild(rect); 
+    }
+    this.indexOfPage++;
+  }
 
   showPopup: boolean = false;
   getStyle() {
@@ -138,8 +186,6 @@ export class AppComponent {
     }
   }
 
-
-  areaInfo: AreaInfo[] = [];
   save() {
     this.areaInfo.push(
       {
@@ -156,7 +202,6 @@ export class AppComponent {
     $('#'+rectId).remove();
     this.showPopup = false;
   }
-
 
 }
 
