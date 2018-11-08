@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="list">
-      <div class="list-row" *ngFor="let list of areaInfo;" (click)="moveTo(list)">
+      <div class="list-row" *ngFor="let list of areaInfo;" (click)="moveTo(list); $event.stopPropagation();">
         <div class="delete-btn">
           <i class="material-icons icon" (click)="delete(list); $event.stopPropagation();">close</i>
         </div>

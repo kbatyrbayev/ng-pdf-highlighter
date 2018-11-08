@@ -217,9 +217,11 @@ export class AppComponent {
 
   listRectangleId: string = '';
   moveTo(list: AreaInfo) {
-    if (this.listRectangleId) {
-      document.getElementById(this.listRectangleId).style.background = 'transparent';
-      document.getElementById(this.listRectangleId).style.opacity = '1';
+    if (this.listRectangleId != '') {
+      if (document.getElementById(this.listRectangleId)) {
+        document.getElementById(this.listRectangleId).style.background = 'transparent';
+        document.getElementById(this.listRectangleId).style.opacity = '1';
+      }
     }
     if (this.listRectangleId !== list.rectangleId) {
       document.getElementById(list.rectangleId).scrollIntoView({ block: 'start', behavior: 'smooth' });
