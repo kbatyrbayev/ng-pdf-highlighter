@@ -200,7 +200,8 @@ export class AppComponent {
       }
     );
     this.showPopup = false;
-    // console.log(this.areaInfo);
+    this.rect = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0 };
+
   }
 
   cancel(event) {
