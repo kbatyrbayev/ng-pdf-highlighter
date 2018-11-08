@@ -22,6 +22,9 @@
     right: 0;
     bottom: 0;
     overflow: hidden;
+    &.move-to {
+        background-color: red;
+    }
 }
 
 .popper {

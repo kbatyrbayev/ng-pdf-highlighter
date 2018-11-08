@@ -215,6 +215,20 @@ export class AppComponent {
     this.areaInfo = this.areaInfo.filter(f => f.isDelete === false);
   }
 
+  listRectangleId: string = '';
+  moveTo(list: AreaInfo) {
+    if (this.listRectangleId) {
+      document.getElementById(this.listRectangleId).style.background = 'transparent';
+      document.getElementById(this.listRectangleId).style.opacity = '1';
+    }
+    if (this.listRectangleId !== list.rectangleId) {
+      document.getElementById(list.rectangleId).scrollIntoView({ block: 'start', behavior: 'smooth' });
+      document.getElementById(list.rectangleId).style.background = 'red';
+      document.getElementById(list.rectangleId).style.opacity = '0.4';
+      this.listRectangleId = list.rectangleId;
+    } 
+  }
+
 }
 
 interface Position {
