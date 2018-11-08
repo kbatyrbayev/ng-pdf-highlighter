@@ -48,9 +48,19 @@
     }
 }
 
-h2 {
-    padding: 10px;
-    border-bottom: 1px solid black;
+.header {
+    h2 {
+        padding: 10px;
+        color: #37474f;
+    }
+    .link {
+        border-bottom: 1px solid black;
+        padding: 10px;
+        font-size: 11px;
+        a {
+            color: #673ab7;
+        }
+    }
 }
 
 .list {
@@ -60,8 +70,17 @@ h2 {
         padding: 10px;
         border-bottom: 1px solid black;
         cursor: pointer;
+        position: relative;
         &:hover {
             background-color: #d5d5d5;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            .icon {
+                font-size: 16px;
+            }
         }
         pre {
             .pre-title {

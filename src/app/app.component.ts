@@ -32,6 +32,7 @@ export class AppComponent {
   constructor() {
     this.areaInfo = [
       {
+        "rectangleId":"rectangle-1",
         "pageNumber": 1,
         "rect": {
           "height": 127,
@@ -40,9 +41,11 @@ export class AppComponent {
           "x2": 706.5,
           "y1": 257,
           "y2": 384
-        }
+        },
+        "isDelete": false
       },
       {
+        "rectangleId": "rectangle-2",
         "pageNumber": 3,
         "rect": {
           "height": 141,
@@ -51,7 +54,8 @@ export class AppComponent {
           "x2": 702.921875,
           "y1": 226,
           "y2": 367
-        }
+        },
+        "isDelete": false
       }];
   }
 
@@ -189,18 +193,26 @@ export class AppComponent {
   save() {
     this.areaInfo.push(
       {
+        rectangleId: this.element.id,
         pageNumber: this.dataPageNumber,
-        rect: this.rect
+        rect: this.rect,
+        isDelete: false
       }
     );
     this.showPopup = false;
-    console.log(this.areaInfo);
+    // console.log(this.areaInfo);
   }
 
   cancel(event) {
     let rectId = this.element.getAttribute('id');
     $('#'+rectId).remove();
     this.showPopup = false;
+  }
+
+  delete(list: AreaInfo) {
+    document.getElementById(list.rectangleId).remove();
+    this.areaInfo.find(f => f.rectangleId === list.rectangleId).isDelete = true;
+    this.areaInfo = this.areaInfo.filter(f => f.isDelete === false);
   }
 
 }
@@ -222,6 +234,8 @@ interface Rectangle {
 
 
 interface AreaInfo {
+  rectangleId: string;
   pageNumber: number;
   rect: Rectangle;
+  isDelete?: boolean;
 }

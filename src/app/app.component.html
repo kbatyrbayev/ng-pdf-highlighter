@@ -1,9 +1,17 @@
 <div class="container">
 
   <div class="container__left-side">
-    <h2>Angular PDF highlighter</h2>
+    <div class="header">
+      <h2>Angular PDF highlighter</h2>
+      <div class="link">
+        <a href="https://github.com/kbatyrbayev/ng-pdf-highlighter" target="blank">Open in GitHub</a>
+      </div>
+    </div>
     <div class="list">
-      <div class="list-row" *ngFor="let list of areaInfo">
+      <div class="list-row" *ngFor="let list of areaInfo;">
+        <div class="delete-btn">
+          <i class="material-icons icon" (click)="delete(list); $event.stopPropagation();">close</i>
+        </div>
         <div class="title">Position:</div>
         <pre>
           <div [innerHTML]="list?.rect | json"></div> 
