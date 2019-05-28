@@ -87,7 +87,7 @@ export class AppComponent {
 
       if (event.type === 'mousedown') {
         this.mouseDownFlag = true;
-        let path = event.path || (event.composedPath && event.composedPath());
+        let path = this.composedPath(event.target);
         let eventPath = path.find(p => p.className == 'page');
 
         if (typeof eventPath !== 'undefined') {
@@ -143,7 +143,7 @@ export class AppComponent {
     elem.style.cursor = 'crosshair';
     // elem.style.background = 'red';
     // elem.style.opacity = '0.4';
-    let path = event.path || (event.composedPath && event.composedPath());
+    let path = this.composedPath(event.target);
 
     path.find(p => p.className == 'page').appendChild(elem);
 
@@ -166,6 +166,19 @@ export class AppComponent {
       path.find(p => p.className == 'page').children[2].appendChild(rect);
     }
     this.indexOfPage++;
+  }
+
+  composedPath(el) {
+    let path = [];
+    while (el) {
+      path.push(el);
+      if (el.tagName === 'HTML') {
+        path.push(document);
+        path.push(window);
+        return path;
+      }
+      el = el.parentElement;
+    }
   }
 
   showPopup: boolean = false;
