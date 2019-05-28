@@ -1,4 +1,4 @@
-import { Component, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import * as Popper from 'popper.js/dist/umd/popper.js';
 import * as $ from 'jquery';
 @Component({
@@ -8,17 +8,11 @@ import * as $ from 'jquery';
 })
 export class AppComponent {
 
-  @ViewChild('pdfContainer') private pdfContainer: ElementRef;
-
-  title = 'ng-pdf-highlighter';
-  comment: string = '';
-
   rect: Rectangle = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0 };
   lastMousePosition: Position = { x: 0, y: 0 };
   canvasPosition: Position = { x: 0, y: 0 };
   mousePosition: Position = { x: 0, y: 0 };
   mouseDownFlag: boolean = false;
-
   pagePosition: Position = { x: 0, y: 0 };
 
   cnv;
@@ -32,7 +26,7 @@ export class AppComponent {
   constructor() {
     this.areaInfo = [
       {
-        "rectangleId":"rectangle-1",
+        "rectangleId": "rectangle-1",
         "pageNumber": 1,
         "rect": {
           "height": 127,
@@ -62,13 +56,13 @@ export class AppComponent {
   mouseEvent(event) {
 
     if (!this.showPopup) {
+
       if (event.type === 'mousemove') {
-  
         this.mousePosition = {
           x: event.clientX - this.pagePosition.x,
           y: event.clientY - this.pagePosition.y
         };
-  
+
         if (this.mouseDownFlag) {
           let width = this.mousePosition.x - this.lastMousePosition.x;
           let height = this.mousePosition.y - this.lastMousePosition.y;
@@ -80,7 +74,7 @@ export class AppComponent {
             width: width,
             height: height
           };
-  
+
           if (this.element != null) {
             this.element.style.width = width + 'px';
             this.element.style.height = height + 'px';
@@ -88,49 +82,43 @@ export class AppComponent {
               document.getElementsByClassName('to-draw-rectangle')[this.dataPageNumber - 1].appendChild(this.element);
             }
           }
-  
         }
-        
-  
       }
-  
+
       if (event.type === 'mousedown') {
         this.mouseDownFlag = true;
-  
-        let eventPath = event.path.find(p => p.className == 'page');
+        let path = event.path || (event.composedPath && event.composedPath());
+        let eventPath = path.find(p => p.className == 'page');
+
         if (typeof eventPath !== 'undefined') {
           this.dataPageNumber = parseInt(eventPath.getAttribute('data-page-number')); // get id of page
-  
           let toDrawRectangle = document.getElementsByClassName('to-draw-rectangle');
-          let pageOffset = toDrawRectangle[this.dataPageNumber-1].getBoundingClientRect();
-          this.pagePosition = { 
+          let pageOffset = toDrawRectangle[this.dataPageNumber - 1].getBoundingClientRect();
+          this.pagePosition = {
             x: pageOffset.left,
             y: pageOffset.top
           };
-          
-  
+
           this.lastMousePosition = {
             x: event.clientX - this.pagePosition.x,
             y: event.clientY - this.pagePosition.y
           }
-  
+
           let rectId = document.getElementsByClassName('rectangle').length + 1;
-  
           this.element = document.createElement('div');
           this.element.className = 'rectangle';
-          this.element.id = 'rectangle-'+rectId;
+          this.element.id = 'rectangle-' + rectId;
           this.element.style.position = 'absolute';
           this.element.style.border = '2px solid #0084FF';
           this.element.style.borderRadius = '3px';
           this.element.style.left = this.lastMousePosition.x + 'px';
           this.element.style.top = this.lastMousePosition.y + 'px';
         }
-        
       }
-  
+
       if (event.type === 'mouseup') {
-  
         this.mouseDownFlag = false;
+
         if (this.rect.height > 0 && this.rect.width > 0) {
           let popper = document.querySelector('.js-popper');
           new Popper(this.element, popper, {
@@ -138,14 +126,11 @@ export class AppComponent {
           });
           this.showPopup = true;
         }
-  
       }
     }
-
-
   }
 
-  // added new div when pages rendered
+  // added new div with rects when pages rendered
   indexOfPage: number = 1;
   pageRendered(event) {
     let elem = document.createElement('div');
@@ -158,7 +143,9 @@ export class AppComponent {
     elem.style.cursor = 'crosshair';
     // elem.style.background = 'red';
     // elem.style.opacity = '0.4';
-    event.path.find(p => p.className == 'page').appendChild(elem);
+    let path = event.path || (event.composedPath && event.composedPath());
+
+    path.find(p => p.className == 'page').appendChild(elem);
 
     $('.textLayer').addClass('disable-textLayer');
 
@@ -176,7 +163,7 @@ export class AppComponent {
       rect.style.width = rectElem.rect.width + 'px';
       rect.style.height = rectElem.rect.height + 'px';
       //get to-draw-rectangle div and add rectangle
-      event.path.find(p => p.className == 'page').children[2].appendChild(rect); 
+      path.find(p => p.className == 'page').children[2].appendChild(rect);
     }
     this.indexOfPage++;
   }
@@ -191,22 +178,19 @@ export class AppComponent {
   }
 
   save() {
-    this.areaInfo.push(
-      {
-        rectangleId: this.element.id,
-        pageNumber: this.dataPageNumber,
-        rect: this.rect,
-        isDelete: false
-      }
-    );
+    this.areaInfo.push({
+      rectangleId: this.element.id,
+      pageNumber: this.dataPageNumber,
+      rect: this.rect,
+      isDelete: false
+    });
     this.showPopup = false;
     this.rect = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0 };
-
   }
 
-  cancel(event) {
+  cancel() {
     let rectId = this.element.getAttribute('id');
-    $('#'+rectId).remove();
+    $('#' + rectId).remove();
     this.showPopup = false;
     this.rect = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0 };
   }
@@ -230,7 +214,7 @@ export class AppComponent {
       document.getElementById(list.rectangleId).style.background = 'red';
       document.getElementById(list.rectangleId).style.opacity = '0.4';
       this.listRectangleId = list.rectangleId;
-    } 
+    }
   }
 
 }
@@ -240,7 +224,6 @@ interface Position {
   y: number;
 }
 
-
 interface Rectangle {
   x1: number;
   y1: number;
@@ -249,7 +232,6 @@ interface Rectangle {
   width: number;
   height: number;
 }
-
 
 interface AreaInfo {
   rectangleId: string;
