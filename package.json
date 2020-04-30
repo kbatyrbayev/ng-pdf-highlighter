@@ -23,7 +23,7 @@
     "angular-cli-ghpages": "^0.5.3",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.4",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "ng2-pdf-viewer": "^5.2.0",
     "pdfjs": "^2.1.0",
     "popper.js": "^1.14.4",
