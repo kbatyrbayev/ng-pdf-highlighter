@@ -1,6 +1,7 @@
 # NgPdfHighlighter
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.2.
+
 Project updated to version 12.2.3.
 
 
