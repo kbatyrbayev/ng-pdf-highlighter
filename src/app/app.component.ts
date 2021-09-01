@@ -137,6 +137,7 @@ export class AppComponent {
       }
     }
   }
+
   pageRendered(event) {
     const elem = document.createElement('div');
     elem.className = 'to-draw-rectangle';
@@ -148,7 +149,8 @@ export class AppComponent {
     elem.style.cursor = 'crosshair';
     // elem.style.background = 'red';
     // elem.style.opacity = '0.4';
-    const path = this.composedPath(event.target);
+    // console.log(event.target, 'target');
+    const path = this.composedPath(event.source.div);
 
     path.find(p => p.className === 'page').appendChild(elem);
 
@@ -185,6 +187,7 @@ export class AppComponent {
       el = el.parentElement;
     }
   }
+
   getStyle() {
     if (this.showPopup) {
       return 'block';
@@ -216,6 +219,7 @@ export class AppComponent {
     this.areaInfo.find(f => f.rectangleId === list.rectangleId).isDelete = true;
     this.areaInfo = this.areaInfo.filter(f => f.isDelete === false);
   }
+
   moveTo(list: AreaInfo) {
     if (this.listRectangleId !== '') {
       if (document.getElementById(this.listRectangleId)) {
