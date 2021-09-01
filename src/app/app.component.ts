@@ -8,11 +8,41 @@ import * as $ from 'jquery';
 })
 export class AppComponent {
 
+  constructor() {
+    this.areaInfo = [
+      {
+        'rectangleId': 'rectangle-1',
+        'pageNumber': 1,
+        'rect': {
+          'height': 127,
+          'width': 646,
+          'x1': 60.5,
+          'x2': 706.5,
+          'y1': 257,
+          'y2': 384
+        },
+        'isDelete': false
+      },
+      {
+        'rectangleId': 'rectangle-2',
+        'pageNumber': 3,
+        'rect': {
+          'height': 141,
+          'width': 636,
+          'x1': 66.921875,
+          'x2': 702.921875,
+          'y1': 226,
+          'y2': 367
+        },
+        'isDelete': false
+      }];
+  }
+
   rect: Rectangle = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0 };
   lastMousePosition: Position = { x: 0, y: 0 };
   canvasPosition: Position = { x: 0, y: 0 };
   mousePosition: Position = { x: 0, y: 0 };
-  mouseDownFlag: boolean = false;
+  mouseDownFlag = false;
   pagePosition: Position = { x: 0, y: 0 };
 
   cnv;
@@ -23,35 +53,12 @@ export class AppComponent {
 
   areaInfo: AreaInfo[] = [];
 
-  constructor() {
-    this.areaInfo = [
-      {
-        "rectangleId": "rectangle-1",
-        "pageNumber": 1,
-        "rect": {
-          "height": 127,
-          "width": 646,
-          "x1": 60.5,
-          "x2": 706.5,
-          "y1": 257,
-          "y2": 384
-        },
-        "isDelete": false
-      },
-      {
-        "rectangleId": "rectangle-2",
-        "pageNumber": 3,
-        "rect": {
-          "height": 141,
-          "width": 636,
-          "x1": 66.921875,
-          "x2": 702.921875,
-          "y1": 226,
-          "y2": 367
-        },
-        "isDelete": false
-      }];
-  }
+  // added new div with rects when pages rendered
+  indexOfPage = 1;
+
+  showPopup = false;
+
+  listRectangleId = '';
 
   mouseEvent(event) {
 
@@ -64,8 +71,8 @@ export class AppComponent {
         };
 
         if (this.mouseDownFlag) {
-          let width = this.mousePosition.x - this.lastMousePosition.x;
-          let height = this.mousePosition.y - this.lastMousePosition.y;
+          const width = this.mousePosition.x - this.lastMousePosition.x;
+          const height = this.mousePosition.y - this.lastMousePosition.y;
           this.rect = {
             x1: this.lastMousePosition.x,
             y1: this.lastMousePosition.y,
@@ -87,13 +94,13 @@ export class AppComponent {
 
       if (event.type === 'mousedown') {
         this.mouseDownFlag = true;
-        let path = this.composedPath(event.target);
-        let eventPath = path.find(p => p.className == 'page');
+        const path = this.composedPath(event.target);
+        const eventPath = path.find(p => p.className === 'page');
 
         if (typeof eventPath !== 'undefined') {
-          this.dataPageNumber = parseInt(eventPath.getAttribute('data-page-number')); // get id of page
-          let toDrawRectangle = document.getElementsByClassName('to-draw-rectangle');
-          let pageOffset = toDrawRectangle[this.dataPageNumber - 1].getBoundingClientRect();
+          this.dataPageNumber = +eventPath.getAttribute('data-page-number'); // get id of page
+          const toDrawRectangle = document.getElementsByClassName('to-draw-rectangle');
+          const pageOffset = toDrawRectangle[this.dataPageNumber - 1].getBoundingClientRect();
           this.pagePosition = {
             x: pageOffset.left,
             y: pageOffset.top
@@ -102,9 +109,9 @@ export class AppComponent {
           this.lastMousePosition = {
             x: event.clientX - this.pagePosition.x,
             y: event.clientY - this.pagePosition.y
-          }
+          };
 
-          let rectId = document.getElementsByClassName('rectangle').length + 1;
+          const rectId = document.getElementsByClassName('rectangle').length + 1;
           this.element = document.createElement('div');
           this.element.className = 'rectangle';
           this.element.id = 'rectangle-' + rectId;
@@ -120,7 +127,8 @@ export class AppComponent {
         this.mouseDownFlag = false;
 
         if (this.rect.height > 0 && this.rect.width > 0) {
-          let popper = document.querySelector('.js-popper');
+          const popper = document.querySelector('.js-popper');
+          // tslint:disable-next-line:no-unused-expression
           new Popper(this.element, popper, {
             placement: 'top-end'
           });
@@ -129,11 +137,8 @@ export class AppComponent {
       }
     }
   }
-
-  // added new div with rects when pages rendered
-  indexOfPage: number = 1;
   pageRendered(event) {
-    let elem = document.createElement('div');
+    const elem = document.createElement('div');
     elem.className = 'to-draw-rectangle';
     elem.style.position = 'absolute';
     elem.style.left = 0 + 'px';
@@ -143,16 +148,16 @@ export class AppComponent {
     elem.style.cursor = 'crosshair';
     // elem.style.background = 'red';
     // elem.style.opacity = '0.4';
-    let path = this.composedPath(event.target);
+    const path = this.composedPath(event.target);
 
-    path.find(p => p.className == 'page').appendChild(elem);
+    path.find(p => p.className === 'page').appendChild(elem);
 
     $('.textLayer').addClass('disable-textLayer');
 
-    let rectElem = this.areaInfo.find(f => f.pageNumber === this.indexOfPage);
+    const rectElem = this.areaInfo.find(f => f.pageNumber === this.indexOfPage);
     if (typeof rectElem !== 'undefined') {
-      let rectId = document.getElementsByClassName('rectangle').length + 1;
-      let rect = document.createElement('div');
+      const rectId = document.getElementsByClassName('rectangle').length + 1;
+      const rect = document.createElement('div');
       rect.className = 'rectangle';
       rect.id = 'rectangle-' + rectId;
       rect.style.position = 'absolute';
@@ -162,14 +167,14 @@ export class AppComponent {
       rect.style.top = rectElem.rect.y1 + 'px';
       rect.style.width = rectElem.rect.width + 'px';
       rect.style.height = rectElem.rect.height + 'px';
-      //get to-draw-rectangle div and add rectangle
-      path.find(p => p.className == 'page').children[2].appendChild(rect);
+      // get to-draw-rectangle div and add rectangle
+      path.find(p => p.className === 'page').children[2].appendChild(rect);
     }
     this.indexOfPage++;
   }
 
   composedPath(el) {
-    let path = [];
+    const path = [];
     while (el) {
       path.push(el);
       if (el.tagName === 'HTML') {
@@ -180,13 +185,11 @@ export class AppComponent {
       el = el.parentElement;
     }
   }
-
-  showPopup: boolean = false;
   getStyle() {
     if (this.showPopup) {
-      return "block";
+      return 'block';
     } else {
-      return "none";
+      return 'none';
     }
   }
 
@@ -202,7 +205,7 @@ export class AppComponent {
   }
 
   cancel() {
-    let rectId = this.element.getAttribute('id');
+    const rectId = this.element.getAttribute('id');
     $('#' + rectId).remove();
     this.showPopup = false;
     this.rect = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0 };
@@ -213,10 +216,8 @@ export class AppComponent {
     this.areaInfo.find(f => f.rectangleId === list.rectangleId).isDelete = true;
     this.areaInfo = this.areaInfo.filter(f => f.isDelete === false);
   }
-
-  listRectangleId: string = '';
   moveTo(list: AreaInfo) {
-    if (this.listRectangleId != '') {
+    if (this.listRectangleId !== '') {
       if (document.getElementById(this.listRectangleId)) {
         document.getElementById(this.listRectangleId).style.background = 'transparent';
         document.getElementById(this.listRectangleId).style.opacity = '1';
